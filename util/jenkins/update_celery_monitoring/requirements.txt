@@ -16,6 +16,6 @@ pyasn1==0.4.8             # via rsa
 python-dateutil==2.8.1    # via botocore
 pyyaml==3.12              # via awscli
 redis==2.10.6             # via -r requirements/celery.in
-rsa==3.4.2                # via awscli
+rsa==4.1                # via awscli
 s3transfer==0.1.13        # via awscli, boto3
 six==1.15.0               # via python-dateutil
