@@ -61,7 +61,7 @@ redis==3.5.3
     # via -r requirements/celery_progress.in
 requests==2.25.1
     # via opsgenie-sdk
-rsa==3.4.2
+rsa==4.1
     # via awscli
 s3transfer==0.1.13
     # via
