@@ -34,3 +34,4 @@
       tags:
         - newreliconly
     - docker-tools
+    - prefect
