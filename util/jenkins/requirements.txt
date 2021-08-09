@@ -8,17 +8,17 @@ amqp==1.4.9
     # via kombu
 anyjson==0.3.3
     # via kombu
-awscli==1.19.55
+awscli==1.18.223
     # via -r requirements/jenkins.in
 backoff==1.4.3
     # via -r requirements/jenkins.in
 billiard==3.3.0.23
     # via celery
-boto3==1.17.55
+boto3==1.16.63
     # via -r requirements/jenkins.in
 boto==2.49.0
     # via -r requirements/jenkins.in
-botocore==1.20.55
+botocore==1.19.63
     # via
     #   awscli
     #   boto3
@@ -37,10 +37,6 @@ colorama==0.4.3
     # via awscli
 docutils==0.15.2
     # via awscli
-futures==3.3.0 ; python_version == "2.7"
-    # via
-    #   -r requirements/jenkins.in
-    #   s3transfer
 idna==2.10
     # via requests
 jmespath==0.10.0
@@ -66,7 +62,7 @@ pytz==2021.1
     # via
     #   celery
     #   opsgenie-sdk
-pyyaml==5.4.1
+pyyaml==5.3.1
     # via
     #   -r requirements/jenkins.in
     #   awscli
@@ -78,11 +74,11 @@ rsa==4.5
     # via awscli
 s3cmd==2.1.0
     # via -r requirements/jenkins.in
-s3transfer==0.4.1
+s3transfer==0.3.7
     # via
     #   awscli
     #   boto3
-six==1.15.0
+six==1.16.0
     # via
     #   opsgenie-sdk
     #   python-dateutil

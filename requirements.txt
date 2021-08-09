@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-ansible==2.8.19
+ansible==2.8.20
     # via -r requirements/base.in
 awscli==1.18.223
     # via -r requirements/base.in
@@ -38,7 +38,7 @@ cryptography==3.2.1
     #   paramiko
 datadog==0.8.0
     # via -r requirements/base.in
-decorator==4.4.2
+decorator==5.0.7
     # via
     #   datadog
     #   networkx
@@ -50,7 +50,7 @@ ecdsa==0.13.3
     # via -r requirements/base.in
 idna==2.10
     # via requests
-jinja2==2.8
+jinja2==2.11.3
     # via
     #   -r requirements/base.in
     #   ansible
@@ -95,11 +95,11 @@ requests==2.25.1
     #   datadog
 rsa==4.5
     # via awscli
-s3transfer==0.3.4
+s3transfer==0.3.7
     # via
     #   awscli
     #   boto3
-six==1.15.0
+six==1.16.0
     # via
     #   bcrypt
     #   cryptography
