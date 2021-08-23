@@ -1,3 +1,4 @@
 # Needed for CloudFlare cache hit rate job in util/jenkins
 
-requests==2.20.0
+requests
+click==6.7

@@ -12,7 +12,7 @@ importlib-metadata==2.1.1
     # via jsonpickle
 jsonpickle==2.0.0
     # via deepdiff
-urllib3==1.26.4
+urllib3==1.26.6
     # via elasticsearch
 zipp==1.2.0
     # via importlib-metadata
