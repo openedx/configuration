@@ -34,7 +34,7 @@ charset-normalizer==2.1.1
     # via requests
 colorama==0.4.4
     # via awscli
-cryptography==38.0.1
+cryptography==39.0.1
     # via
     #   ansible-base
     #   paramiko
