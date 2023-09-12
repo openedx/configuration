@@ -209,13 +209,13 @@
     src: "{{ item.src }}"
     owner: root
     group: root
-    mode: "{{ item.mode | default(0644) }}"
+    mode: "{{ item.mode }}"
   register: config_templates
   with_items:
-    - { src: 'edx_rsyslog.j2', dest: '/etc/rsyslog.d/99-edx.conf' }
-    - { src: 'etc/logrotate.d/hourly/edx_logrotate.j2', dest: '/etc/logrotate.d/hourly/edx-services' }
+    - { src: 'edx_rsyslog.j2', dest: '/etc/rsyslog.d/99-edx.conf', mode: '0644' }
+    - { src: 'etc/logrotate.d/hourly/edx_logrotate.j2', dest: '/etc/logrotate.d/hourly/edx-services', mode: '0644' }
     - { src: 'etc/cron.hourly/logrotate.j2', dest: '/etc/cron.hourly/logrotate', mode: '0555' }
-    - { src: 'etc/logrotate.d/hourly/edx_logrotate_tracking_log.j2', dest: '/etc/logrotate.d/hourly/tracking.log' }
+    - { src: 'etc/logrotate.d/hourly/edx_logrotate_tracking_log.j2', dest: '/etc/logrotate.d/hourly/tracking.log', mode: '0644' }
 
 - name: Are we in a Docker container
   shell: echo $(egrep -q 'docker' /proc/self/cgroup && echo 'yes' || echo 'no')

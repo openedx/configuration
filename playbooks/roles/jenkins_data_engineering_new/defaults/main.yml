@@ -3,7 +3,7 @@
 
 jenkins_home: '/var/lib/jenkins'
 
-JENKINS_SERVER_NAME: 'jenkins-new.analytics.edx.org'
+JENKINS_SERVER_NAME: 'jenkins-test.analytics.edx.org'
 jenkins_user: 'jenkins'
 jenkins_group: 'jenkins'
 # the groups that the jenkins user must belong to
@@ -28,7 +28,7 @@ de_jenkins_seed_job_source: '{{ role_path }}/../jenkins_data_engineering_new/fil
 
 de_jenkins_user_uid: 900
 de_jenkins_group_gid: 900
-DE_JENKINS_VERSION: jenkins_2.222.3
+DE_JENKINS_VERSION: jenkins_2.387.3
 de_jenkins_jvm_args: '-Djava.awt.headless=true -Xmx16g -Djenkins.install.runSetupWizard=false'
 
 de_jenkins_snap_pkgs:

@@ -1,432 +1,440 @@
 ---
-- name: Install jenkins specific system packages
-  apt:
-    name: '{{ item }}'
-    state: present
-    update_cache: yes
-  with_items: '{{ jenkins_common_debian_pkgs }}'
-  tags:
-    - jenkins
-    - install
-    - install:system-requirements
+# - name: Install jenkins specific system packages
+#   apt:
+#     name: '{{ item }}'
+#     state: present
+#     update_cache: yes
+#   with_items: '{{ jenkins_common_debian_pkgs }}'
+#   tags:
+#     - jenkins
+#     - install
+#     - install:system-requirements
 
-- name: Install jenkins specific snap packages
-  command: 'snap install {{ item }} --classic'
-  with_items: '{{ jenkins_common_snap_pkgs }}'
-  tags:
-    - jenkins
-    - install
-    - install:system-requirements
+# - name: Install jenkins specific snap packages
+#   command: 'snap install {{ item }} --classic'
+#   with_items: '{{ jenkins_common_snap_pkgs }}'
+#   tags:
+#     - jenkins
+#     - install
+#     - install:system-requirements
 
-# Certain versions of Python are not available as apt-packages,
-# depending on your distribution. Use the deadsnakes PPA to have
-# access to them
-- name: add deadsnakes PPA for newer Python versions
-  apt_repository:
-    repo: "ppa:deadsnakes/ppa"
-    update_cache: yes
-  tags:
-    - jenkins
-    - install
-    - install:system-requirements
+# # Certain versions of Python are not available as apt-packages,
+# # depending on your distribution. Use the deadsnakes PPA to have
+# # access to them
+# - name: add deadsnakes PPA for newer Python versions
+#   apt_repository:
+#     repo: "ppa:deadsnakes/ppa"
+#     update_cache: yes
+#   tags:
+#     - jenkins
+#     - install
+#     - install:system-requirements
 
-# Install newer versions of python for testing, but do not set them
-# as the default version
-- name: Install specific versions of python
-  apt:
-    name: '{{ item }}'
-    state: present
-    update_cache: yes
-  with_items: '{{ jenkins_common_python_versions }}'
-  tags:
-    - jenkins
-    - install
-    - install:system-requirements
+# # Install newer versions of python for testing, but do not set them
+# # as the default version
+# - name: Install specific versions of python
+#   apt:
+#     name: '{{ item }}'
+#     state: present
+#     update_cache: yes
+#   with_items: '{{ jenkins_common_python_versions }}'
+#   tags:
+#     - jenkins
+#     - install
+#     - install:system-requirements
 
-# Install 'dev' packages for each version of python that is installed
-- name: Install python dev packages
-  apt:
-    name: '{{ item }}-dev'
-    state: present
-    update_cache: yes
-  with_items: '{{ jenkins_common_python_versions }}'
-  tags:
-    - jenkins
-    - install
-    - install:system-requirements
+# # Install 'dev' packages for each version of python that is installed
+# - name: Install python dev packages
+#   apt:
+#     name: '{{ item }}-dev'
+#     state: present
+#     update_cache: yes
+#   with_items: '{{ jenkins_common_python_versions }}'
+#   tags:
+#     - jenkins
+#     - install
+#     - install:system-requirements
 
-- name: Install extra packages required for python3.8
-  apt:
-    name: '{{ item }}'
-    state: present
-    update_cache: yes
-  when: '"python3.8" in jenkins_common_python_versions'
-  with_list:
-    - 'python3.8-lib2to3'
-    - 'python3.8-distutils'
-  tags:
-    - jenkins
-    - install
-    - install:system-requirements
+# - name: Install extra packages required for python3.8
+#   apt:
+#     name: '{{ item }}'
+#     state: present
+#     update_cache: yes
+#   when: '"python3.8" in jenkins_common_python_versions'
+#   with_list:
+#     - 'python3.8-lib2to3'
+#     - 'python3.8-distutils'
+#   tags:
+#     - jenkins
+#     - install
+#     - install:system-requirements
 
-- name: Create jenkins group with specified gid
-  group:
-    name: '{{ jenkins_common_group }}'
-    gid: '{{ jenkins_common_group_gid }}'
-    state: present
-  when: jenkins_common_group_gid is defined
-  tags:
-    - install
-    - install:system-requirements
+# - name: Create jenkins group with specified gid
+#   group:
+#     name: '{{ jenkins_common_group }}'
+#     gid: '{{ jenkins_common_group_gid }}'
+#     state: present
+#   when: jenkins_common_group_gid is defined
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Create jenkins group
-  group:
-    name: '{{ jenkins_common_group }}'
-    state: present
-  when: jenkins_common_group_gid is not defined or not jenkins_common_group_gid
-  tags:
-    - install
-    - install:system-requirements
+# - name: Create jenkins group
+#   group:
+#     name: '{{ jenkins_common_group }}'
+#     state: present
+#   when: jenkins_common_group_gid is not defined or not jenkins_common_group_gid
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Create the jenkins user with specified uid and add to the group
-  user:
-    name: '{{ jenkins_common_user }}'
-    append: yes
-    uid: '{{ jenkins_common_user_uid }}'
-    groups:  '{{ jenkins_common_groups }}'
-  when: jenkins_common_user_uid is defined
-  tags:
-    - install
-    - install:system-requirements
+# - name: Create the jenkins user with specified uid and add to the group
+#   user:
+#     name: '{{ jenkins_common_user }}'
+#     append: yes
+#     uid: '{{ jenkins_common_user_uid }}'
+#     groups:  '{{ jenkins_common_groups }}'
+#   when: jenkins_common_user_uid is defined
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Create the jenkins user and add to the group
-  user:
-    name: '{{ jenkins_common_user }}'
-    append: yes
-    groups:  '{{ jenkins_common_groups }}'
-  when: jenkins_common_user_uid is not defined or not jenkins_common_user_uid
-  tags:
-    - install
-    - install:system-requirements
+# - name: Create the jenkins user and add to the group
+#   user:
+#     name: '{{ jenkins_common_user }}'
+#     append: yes
+#     groups:  '{{ jenkins_common_groups }}'
+#   when: jenkins_common_user_uid is not defined or not jenkins_common_user_uid
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Create jenkins home and set ownership
-  file:
-    path: "{{ jenkins_common_home }}"
-    state: directory
-    owner: "{{ jenkins_common_user }}"
-    group: "{{ jenkins_common_group }}"
-    mode: 0700
-  tags:
-    - install
-    - install:system-requirements
+# - name: Create jenkins home and set ownership
+#   file:
+#     path: "{{ jenkins_common_home }}"
+#     state: directory
+#     owner: "{{ jenkins_common_user }}"
+#     group: "{{ jenkins_common_group }}"
+#     mode: 0700
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: set nofile soft limit for the user jenkins
-  pam_limits:
-    domain: "{{ jenkins_common_user }}"
-    limit_type: soft
-    limit_item: nofile
-    value: 4096
-  tags:
-    - install
-    - install:system-requirements
+# - name: set nofile soft limit for the user jenkins
+#   pam_limits:
+#     domain: "{{ jenkins_common_user }}"
+#     limit_type: soft
+#     limit_item: nofile
+#     value: 4096
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: set nofile hard limit for the user jenkins
-  pam_limits:
-    domain: "{{ jenkins_common_user }}"
-    limit_type: hard
-    limit_item: nofile
-    value: 8096
-  tags:
-    - install
-    - install:system-requirements
+# - name: set nofile hard limit for the user jenkins
+#   pam_limits:
+#     domain: "{{ jenkins_common_user }}"
+#     limit_type: hard
+#     limit_item: nofile
+#     value: 8096
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Create /var/run/jenkins
-  file:
-    path: "/var/run/jenkins"
-    state: directory
-    owner: "{{ jenkins_common_user }}"
-    group: "{{ jenkins_common_group }}"
-  tags:
-    - install
-    - install:system-requirements
+# - name: Create /var/run/jenkins
+#   file:
+#     path: "/var/run/jenkins"
+#     state: directory
+#     owner: "{{ jenkins_common_user }}"
+#     group: "{{ jenkins_common_group }}"
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Delete any existing jenkins-configuration folders to avoid unwanted configuration
-  file:
-    path: '{{ item }}'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-    state: absent
-  with_items:
-    - '{{ jenkins_common_home }}/init.groovy.d'
-    - '{{ jenkins_common_home }}/plugins'
-    - '{{ jenkins_common_home }}/utils'
-    - '{{ jenkins_common_config_path }}'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Delete any existing jenkins-configuration folders to avoid unwanted configuration
+#   file:
+#     path: '{{ item }}'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#     state: absent
+#   with_items:
+#     - '{{ jenkins_common_home }}/init.groovy.d'
+#     - '{{ jenkins_common_home }}/plugins'
+#     - '{{ jenkins_common_home }}/utils'
+#     - '{{ jenkins_common_config_path }}'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Create necessary folders
-  file:
-    path: '{{ item }}'
-    state: directory
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  with_items:
-    - /usr/share/jenkins
-    - '{{ jenkins_common_home }}/init.groovy.d'
-    - '{{ jenkins_common_config_path }}'
-    - '{{ jenkins_common_home }}/utils'
-    - '{{ jenkins_common_home }}/plugins'
-    - '{{ jenkins_common_git_home }}'
-    - /var/log/jenkins
-    - /var/cache/jenkins
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Create necessary folders
+#   file:
+#     path: '{{ item }}'
+#     state: directory
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   with_items:
+#     - /usr/share/jenkins
+#     - '{{ jenkins_common_home }}/init.groovy.d'
+#     - '{{ jenkins_common_config_path }}'
+#     - '{{ jenkins_common_home }}/utils'
+#     - '{{ jenkins_common_home }}/plugins'
+#     - '{{ jenkins_common_git_home }}'
+#     - /var/log/jenkins
+#     - /var/cache/jenkins
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Repository Signing Key for Jenkins 2.235.3
-  apt_key:
-    url: "https://pkg.jenkins.io/debian-stable/jenkins.io.key"
-    state: present
-  tags:
-    - install
-    - install:app-requirements
-  become: yes
+# - name: Repository Signing Key for Jenkins 2.235.3
+#   apt_key:
+#     url: "https://pkg.jenkins.io/debian-stable/jenkins.io.key"
+#     state: present
+#   tags:
+#     - install
+#     - install:app-requirements
+#   become: yes
 
-- name: Download Jenkins war file
-  get_url:
-    url: '{{ jenkins_common_war_source }}/{{ JENKINS_COMMON_VERSION }}.war'
-    dest: /usr/share/jenkins/jenkins.war
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-    force: yes
-  tags:
-    - install
-    - install:app-requirements
+# # - name: Download Jenkins war file
+# #   get_url:
+# #     url: '{{ jenkins_common_war_source }}/{{ JENKINS_COMMON_VERSION }}.war'
+# #     dest: /usr/share/jenkins/jenkins.war
+# #     owner: '{{ jenkins_common_user }}'
+# #     group: '{{ jenkins_common_group }}'
+# #     force: yes
+# #   tags:
+# #     - install
+# #     - install:app-requirements
+# - name: Set ownership and group for Jenkins war file
+#   file:
+#     path: /usr/share/jenkins/jenkins.war
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   tags:
+#     - install
+#     - install:app-requirements
 
-- name: Add Jenkins systemd configuration
-  template:
-    src:  "etc/systemd/system/jenkins.service.j2"
-    dest: "/etc/systemd/system/jenkins.service"
-  tags:
-    - install
-    - install:system-requirements
+# - name: Add Jenkins systemd configuration
+#   template:
+#     src:  "etc/systemd/system/jenkins.service.j2"
+#     dest: "/etc/systemd/system/jenkins.service"
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Configure logrotate for jenkins application log
-  template:
-    src:  "etc/logrotate.d/jenkins_log.j2"
-    dest: "/etc/logrotate.d/jenkins"
-  tags:
-    - install
-    - install:system-requirements
+# - name: Configure logrotate for jenkins application log
+#   template:
+#     src:  "etc/logrotate.d/jenkins_log.j2"
+#     dest: "/etc/logrotate.d/jenkins"
+#   tags:
+#     - install
+#     - install:system-requirements
 
-- name: Add env vars
-  template:
-    src: "jenkins-env.sh.j2"
-    dest: "/etc/profile.d/jenkins-env.sh"
-    owner: root
-    group: root
-    mode: "0755"
-  tags:
-    - install
-    - install:base
+# - name: Add env vars
+#   template:
+#     src: "jenkins-env.sh.j2"
+#     dest: "/etc/profile.d/jenkins-env.sh"
+#     owner: root
+#     group: root
+#     mode: "0755"
+#   tags:
+#     - install
+#     - install:base
 
-- name: Download jenkins-configuration repo
-  git:
-      repo: '{{ jenkins_common_configuration_git_url }}'
-      dest: '{{ jenkins_common_git_home }}/jenkins-configuration'
-      version: '{{ jenkins_common_jenkins_configuration_branch }}'
-  become: true
-  become_user: '{{ jenkins_common_user }}'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Download jenkins-configuration repo
+#   git:
+#       repo: '{{ jenkins_common_configuration_git_url }}'
+#       dest: '{{ jenkins_common_git_home }}/jenkins-configuration'
+#       version: '{{ jenkins_common_jenkins_configuration_branch }}'
+#   become: true
+#   become_user: '{{ jenkins_common_user }}'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Run gradle libs
-  shell: './gradlew libs'
-  args:
-    chdir: '{{ jenkins_common_git_home }}/jenkins-configuration'
-  environment:
-    UTILS_PATH: '{{ jenkins_common_home }}/utils'
-    JENKINS_VERSION: '{{ JENKINS_COMMON_VERSION }}'
-  become: true
-  become_user: '{{ jenkins_common_user }}'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Run gradle libs
+#   shell: './gradlew libs'
+#   args:
+#     chdir: '{{ jenkins_common_git_home }}/jenkins-configuration'
+#   environment:
+#     UTILS_PATH: '{{ jenkins_common_home }}/utils'
+#     JENKINS_VERSION: '{{ JENKINS_COMMON_VERSION }}'
+#   become: true
+#   become_user: '{{ jenkins_common_user }}'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Copy init scripts into init.groovy.d
-  command: 'cp {{ jenkins_common_git_home }}/jenkins-configuration/{{ jenkins_common_configuration_src_path }}/{{ item }} {{ jenkins_common_home }}/init.groovy.d/'
-  with_items: '{{ jenkins_common_configuration_scripts }}'
-  become: true
-  become_user: '{{ jenkins_common_user }}'
-  register: init_scripts_copied
-  tags:
-    - install
-    - install:base
-    - install:plugins
+# - name: Copy init scripts into init.groovy.d
+#   command: 'cp {{ jenkins_common_git_home }}/jenkins-configuration/{{ jenkins_common_configuration_src_path }}/{{ item }} {{ jenkins_common_home }}/init.groovy.d/'
+#   with_items: '{{ jenkins_common_configuration_scripts }}'
+#   become: true
+#   become_user: '{{ jenkins_common_user }}'
+#   register: init_scripts_copied
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
 
-- name: Copy all init scripts other than oauth and security for local dev
-  command: 'cp {{ jenkins_common_git_home }}/jenkins-configuration/{{ jenkins_common_configuration_src_path }}/{{ item }} {{ jenkins_common_home }}/init.groovy.d/'
-  with_items: '{{ jenkins_common_configuration_scripts }}'
-  become: true
-  become_user: '{{ jenkins_common_user }}'
-  when: 'item != "4configureGHOAuth.groovy" and item != "4configureSecurity.groovy" and init_scripts_copied is not defined'
-  tags:
-    - jenkins:local-dev
+# - name: Copy all init scripts other than oauth and security for local dev
+#   command: 'cp {{ jenkins_common_git_home }}/jenkins-configuration/{{ jenkins_common_configuration_src_path }}/{{ item }} {{ jenkins_common_home }}/init.groovy.d/'
+#   with_items: '{{ jenkins_common_configuration_scripts }}'
+#   become: true
+#   become_user: '{{ jenkins_common_user }}'
+#   when: 'item != "4configureGHOAuth.groovy" and item != "4configureSecurity.groovy" and init_scripts_copied is not defined'
+#   tags:
+#     - jenkins:local-dev
 
-- name: Create jenkins config sub folders
-  file:
-    path: '{{ item }}'
-    state: directory
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  with_items:
-    - '{{ jenkins_common_config_path }}/credentials'
-    - '{{ jenkins_common_config_path }}/ec2'
-    - '{{ jenkins_common_config_path }}/xml'
-    - '{{ jenkins_common_config_path }}/splunk'
-  tags:
-     - install
-     - install:base
-     - install:plugins
-     - jenkins:local-dev
+# - name: Create jenkins config sub folders
+#   file:
+#     path: '{{ item }}'
+#     state: directory
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   with_items:
+#     - '{{ jenkins_common_config_path }}/credentials'
+#     - '{{ jenkins_common_config_path }}/ec2'
+#     - '{{ jenkins_common_config_path }}/xml'
+#     - '{{ jenkins_common_config_path }}/splunk'
+#   tags:
+#      - install
+#      - install:base
+#      - install:plugins
+#      - jenkins:local-dev
 
-- name: Copy non plugins template files
-  template:
-    src: '{{ role_path }}/templates/config/{{ item }}.yml.j2'
-    dest: '{{ jenkins_common_config_path }}/{{ item }}.yml'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  with_items: '{{ jenkins_common_non_plugin_template_files }}'
-  register: templates_copied
-  tags:
-    - install
-    - install:base
-    - install:plugins
+# - name: Copy non plugins template files
+#   template:
+#     src: '{{ role_path }}/templates/config/{{ item }}.yml.j2'
+#     dest: '{{ jenkins_common_config_path }}/{{ item }}.yml'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   with_items: '{{ jenkins_common_non_plugin_template_files }}'
+#   register: templates_copied
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
 
-- name: For local dev, copy any config files other than oauth and security
-  template:
-    src: '{{ role_path }}/templates/config/{{ item }}.yml.j2'
-    dest: '{{ jenkins_common_config_path }}/{{ item }}.yml'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  with_items: '{{ jenkins_common_non_plugin_template_files }}'
-  when: 'item != "github_oauth" and item != "security" and templates_copied is not defined'
-  tags:
-    - jenkins:local-dev
+# - name: For local dev, copy any config files other than oauth and security
+#   template:
+#     src: '{{ role_path }}/templates/config/{{ item }}.yml.j2'
+#     dest: '{{ jenkins_common_config_path }}/{{ item }}.yml'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   with_items: '{{ jenkins_common_non_plugin_template_files }}'
+#   when: 'item != "github_oauth" and item != "security" and templates_copied is not defined'
+#   tags:
+#     - jenkins:local-dev
 
-- name: Update Github OAUTH settings when promoting jenkins instance to production
-  template:
-    src: '{{ role_path }}/templates/config/security.yml.j2'
-    dest: '{{ jenkins_common_config_path }}/security.yml'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  when: '"security" in jenkins_common_non_plugin_template_files and templates_copied is not defined'
-  tags:
-    - jenkins:promote-to-production
+# - name: Update Github OAUTH settings when promoting jenkins instance to production
+#   template:
+#     src: '{{ role_path }}/templates/config/security.yml.j2'
+#     dest: '{{ jenkins_common_config_path }}/security.yml'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   when: '"security" in jenkins_common_non_plugin_template_files and templates_copied is not defined'
+#   tags:
+#     - jenkins:promote-to-production
 
-- name: Copy plugins.yml config file
-  template:
-    src: '{{ role_path }}/templates/config/plugins.yml.j2'
-    dest: '{{jenkins_common_config_path }}/plugins.yml'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Copy plugins.yml config file
+#   template:
+#     src: '{{ role_path }}/templates/config/plugins.yml.j2'
+#     dest: '{{jenkins_common_config_path }}/plugins.yml'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Copy ec2 config files
-  template:
-    src: '{{ item }}'
-    dest: '{{ jenkins_common_config_path }}/ec2/'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  with_fileglob:
-    - '{{ role_path }}/files/ec2/*'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Copy ec2 config files
+#   template:
+#     src: '{{ item }}'
+#     dest: '{{ jenkins_common_config_path }}/ec2/'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   with_fileglob:
+#     - '{{ role_path }}/files/ec2/*'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Copy xml config files
-  template:
-    src: '{{ item }}'
-    dest: '{{ jenkins_common_config_path }}/xml/'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  with_fileglob:
-    - '{{ jenkins_common_seed_job_source }}'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Copy xml config files
+#   template:
+#     src: '{{ item }}'
+#     dest: '{{ jenkins_common_config_path }}/xml/'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   with_fileglob:
+#     - '{{ jenkins_common_seed_job_source }}'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Copy splunk config script
-  template:
-    src: '{{ item }}'
-    dest: '{{ jenkins_common_config_path }}/splunk/'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  with_fileglob:
-    - '{{ jenkins_common_splunk_file_path }}'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Copy splunk config script
+#   template:
+#     src: '{{ item }}'
+#     dest: '{{ jenkins_common_config_path }}/splunk/'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   with_fileglob:
+#     - '{{ jenkins_common_splunk_file_path }}'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Run plugins.gradle to download plugins
-  shell: './gradlew -b plugins.gradle plugins'
-  args:
-    chdir: '{{ jenkins_common_git_home }}/jenkins-configuration'
-  environment:
-    PLUGIN_OUTPUT_DIR: '{{ jenkins_common_home }}/plugins'
-    PLUGIN_CONFIG: '{{ jenkins_common_config_path }}/plugins.yml'
-  become: true
-  become_user: '{{ jenkins_common_user }}'
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Run plugins.gradle to download plugins
+#   shell: './gradlew -b plugins.gradle plugins'
+#   args:
+#     chdir: '{{ jenkins_common_git_home }}/jenkins-configuration'
+#   environment:
+#     PLUGIN_OUTPUT_DIR: '{{ jenkins_common_home }}/plugins'
+#     PLUGIN_CONFIG: '{{ jenkins_common_config_path }}/plugins.yml'
+#   become: true
+#   become_user: '{{ jenkins_common_user }}'
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Copy secret file credentials
-  copy:
-    content: "{{ item.content }}"
-    dest: '{{ jenkins_common_config_path }}/credentials/{{ item.name }}'
-  with_items: '{{ JENKINS_SECRET_FILES_LIST }}'
-  no_log: yes
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Copy secret file credentials
+#   copy:
+#     content: "{{ item.content }}"
+#     dest: '{{ jenkins_common_config_path }}/credentials/{{ item.name }}'
+#   with_items: '{{ JENKINS_SECRET_FILES_LIST }}'
+#   no_log: yes
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
-- name: Copy ec2 key
-  copy:
-    content: '{{ JENKINS_EC2_PRIVATE_KEY }}'
-    dest: '{{ jenkins_common_config_path }}/ec2/id_rsa'
-    owner: '{{ jenkins_common_user }}'
-    group: '{{ jenkins_common_group }}'
-  no_log: yes
-  tags:
-    - install
-    - install:base
-    - install:plugins
-    - jenkins:local-dev
+# - name: Copy ec2 key
+#   copy:
+#     content: '{{ JENKINS_EC2_PRIVATE_KEY }}'
+#     dest: '{{ jenkins_common_config_path }}/ec2/id_rsa'
+#     owner: '{{ jenkins_common_user }}'
+#     group: '{{ jenkins_common_group }}'
+#   no_log: yes
+#   tags:
+#     - install
+#     - install:base
+#     - install:plugins
+#     - jenkins:local-dev
 
 - name: Start Jenkins Service
   systemd:

@@ -9,7 +9,8 @@
 - name: Update apt-get
   raw: apt-get update -qq
   register: python_update_result
-  until: python_update_result.rc == 0
+  # until: python_update_result.rc == 0
+  until: python_update_result is succeeded
   retries: 10
   delay: 10
 

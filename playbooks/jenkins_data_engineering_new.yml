@@ -1,18 +1,18 @@
 ---
-- name: Bootstrap instance(s)
-  hosts: all
-  gather_facts: no
-  become: True
-  roles:
-    - python
+# - name: Bootstrap instance(s)
+#   hosts: all
+#   gather_facts: no
+#   become: True
+#   roles:
+#     - python
 
-- name: Mount EBS
-  hosts: all
-  become: True
-  vars:
-    volumes: "{{ JENKINS_VOLUMES }}"
-  roles:
-    - mount_ebs
+# - name: Mount EBS
+#   hosts: all
+#   become: True
+#   vars:
+#     volumes: "{{ JENKINS_VOLUMES }}"
+#   roles:
+#     - mount_ebs
 
 - name: Configure instance(s)
   hosts: all
@@ -26,14 +26,14 @@
     ansible_distribution_release: focal
 
   roles:
-    - role: aws
-      when: COMMON_ENABLE_AWS_ROLE
-    - docker-tools
+    # - role: aws
+    #   when: COMMON_ENABLE_AWS_ROLE
+    # - docker-tools
     - jenkins_data_engineering_new
     - role: newrelic_infrastructure
-      when: COMMON_ENABLE_NEWRELIC_INFRASTRUCTURE
-      tags:
-        - newreliconly
-    - role: aws_cloudwatch_agent
-      tags:
-        - cloudwatch
+    #   when: COMMON_ENABLE_NEWRELIC_INFRASTRUCTURE
+    #   tags:
+    #     - newreliconly
+    # - role: aws_cloudwatch_agent
+    #   tags:
+    #     - cloudwatch

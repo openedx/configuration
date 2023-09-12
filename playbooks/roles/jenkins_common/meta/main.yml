@@ -1,21 +1,21 @@
 ---
 dependencies:
-  - common
-  - role: nginx
-    nginx_app_dir: "/etc/nginx"
-    nginx_log_dir: "/var/log/nginx"
-    nginx_data_dir: "{{ nginx_app_dir }}"
-    nginx_conf_dir: "{{ nginx_app_dir }}/conf.d"
-    nginx_sites_available_dir: "{{ nginx_app_dir }}/sites-available"
-    nginx_sites_enabled_dir: "{{ nginx_app_dir }}/sites-enabled"
-    nginx_server_static_dir: "{{ nginx_data_dir }}/server-static"
-    nginx_htpasswd_file: "{{ nginx_app_dir }}/nginx.htpasswd"
-    nginx_default_sites: "jenkins"
-    nginx_sites: jenkins
-    jenkins_nginx_port: "{{ jenkins_common_nginx_port }}"
-    jenkins_server_name: "{{ JENKINS_SERVER_NAME }}"
-    jenkins_port: "{{ jenkins_common_port }}"
-    jenkins_protocol_https: "{{ jenkins_common_protocol_https }}"
-    tags: jenkins:promote-to-production
-  - role: oraclejdk
-    tags: java
+  # - common
+  # - role: nginx
+  #   nginx_app_dir: "/etc/nginx"
+  #   nginx_log_dir: "/var/log/nginx"
+  #   nginx_data_dir: "{{ nginx_app_dir }}"
+  #   nginx_conf_dir: "{{ nginx_app_dir }}/conf.d"
+  #   nginx_sites_available_dir: "{{ nginx_app_dir }}/sites-available"
+  #   nginx_sites_enabled_dir: "{{ nginx_app_dir }}/sites-enabled"
+  #   nginx_server_static_dir: "{{ nginx_data_dir }}/server-static"
+  #   nginx_htpasswd_file: "{{ nginx_app_dir }}/nginx.htpasswd"
+  #   nginx_default_sites: "jenkins"
+  #   nginx_sites: jenkins
+  #   jenkins_nginx_port: "{{ jenkins_common_nginx_port }}"
+  #   jenkins_server_name: "{{ JENKINS_SERVER_NAME }}"
+  #   jenkins_port: "{{ jenkins_common_port }}"
+  #   jenkins_protocol_https: "{{ jenkins_common_protocol_https }}"
+  #   tags: jenkins:promote-to-production
+  # - role: oraclejdk
+  #   tags: java

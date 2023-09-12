@@ -137,15 +137,21 @@
   # We skip users in the previous task, and they end up with no content_length
   when: (USER_FAIL_MISSING_KEYS and 'content' in item and item.content == "")
 
+- name: Print the github
+  debug:
+    msg: "{{ item.github }} {{ item.get('state', 'present') }}"
+  with_items: "{{ user_info }}"
+
 - name: Get github key(s) and update the authorized_keys file
   authorized_key:
     user: "{{ item.name }}"
+    path: /home/{{ item.name }}/.ssh/authorized_keys
     exclusive: yes
     key: "https://github.com/{{ item.name }}.keys"
   when: item.github is defined and item.get('state', 'present') == 'present'
   register: task_result
   until: task_result is succeeded
-  retries: 5
+  retries: 1
   with_items: "{{ user_info }}"
 
 - name: Create ~/.ssh directory for non github users

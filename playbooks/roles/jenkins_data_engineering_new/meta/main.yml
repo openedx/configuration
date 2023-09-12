@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - common
+  # - common
   - role: jenkins_common
     jenkins_node_usage: 'NORMAL'
     JENKINS_COMMON_VERSION: '{{ DE_JENKINS_VERSION }}'
