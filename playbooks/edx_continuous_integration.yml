@@ -65,12 +65,12 @@
     - role: mfe
       MFE_NAME: learning
       when: LEARNING_MFE_ENABLED
-    - role: course_authoring
-      MFE_NAME: course-authoring
-      when: COURSE_AUTHORING_MFE_ENABLED
-    - role: mfe
+    - role: library_authoring
       MFE_NAME: library-authoring
       when: LIBRARY_AUTHORING_MFE_ENABLED
+    - role: mfe
+      MFE_NAME: course-authoring
+      when: COURSE_AUTHORING_MFE_ENABLED
     - role: mfe
       MFE_NAME: ora-grading
       when: ORA_GRADING_MFE_ENABLED

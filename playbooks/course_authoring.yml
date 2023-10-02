@@ -1,16 +1,16 @@
-- name: Deploy the Course Authoring MFE
+- name: Deploy course authoring MFE Frontend
   hosts: all
   become: True
   gather_facts: True
   vars:
     ENABLE_NEWRELIC: False
     CLUSTER_NAME: 'course-authoring'
-    COURSE_AUTHORING_ENABLED: True
+    COURSE_AUTHORING_MFE_ENABLED: True
     COURSE_AUTHORING_SANDBOX_BUILD: False
   roles:
-    - role: course_authoring
+    - role: mfe
       MFE_NAME: course-authoring
     - role: splunkforwarder
       when: COMMON_ENABLE_SPLUNKFORWARDER
     - role: newrelic_infrastructure
-      when: COMMON_ENABLE_NEWRELICE_INFRASTRUCTURE
+      when: COMMON_ENABLE_NEWRELIC_INFRASTRUCTURE

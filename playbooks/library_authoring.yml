@@ -1,11 +1,11 @@
-- name: Deploy the Library Authoring MFE
+- name: Deploy library authoring MFE Frontend
   hosts: all
   become: True
   gather_facts: True
   vars:
     ENABLE_NEWRELIC: False
     CLUSTER_NAME: 'library-authoring'
-    LIBRARY_AUTHORING_ENABLED: True
+    LIBRARY_AUTHORING_MFE_ENABLED: True
     LIBRARY_AUTHORING_SANDBOX_BUILD: False
   roles:
     - role: library_authoring
@@ -13,4 +13,4 @@
     - role: splunkforwarder
       when: COMMON_ENABLE_SPLUNKFORWARDER
     - role: newrelic_infrastructure
-      when: COMMON_ENABLE_NEWRELICE_INFRASTRUCTURE
+      when: COMMON_ENABLE_NEWRELIC_INFRASTRUCTURE
