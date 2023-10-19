@@ -1,7 +1,7 @@
 -c constraints.txt
 # Standard dependencies for Ansible runs
 
-ansible<3.0.0
+ansible<5.0.0
 awscli
 boto
 boto3
