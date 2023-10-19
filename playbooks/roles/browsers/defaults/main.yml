@@ -21,28 +21,28 @@ browser_deb_pkgs:
     - wget
 
 # Firefox for Xenial
-FIREFOX_VERSION: version 59.*
+FIREFOX_VERSION: version 97.*
 
 # Packages we host in S3 to ensure correct browser version Both Chrome and
 # FireFox update their apt repos with the latest version, which often causes
 # spurious acceptance test failures.
 browser_s3_deb_pkgs:
-  - name: firefox_61.0.1+build1-0ubuntu0.16.04.1_amd64.deb
-    url: https://s3.amazonaws.com/vagrant.testeng.edx.org/firefox_61.0.1%2Bbuild1-0ubuntu0.16.04.1_amd64.deb
-  - name: google-chrome-stable_68.0.3440.84-1_amd64.deb
-    url: https://s3.amazonaws.com/vagrant.testeng.edx.org/google-chrome-stable_68.0.3440.84-1_amd64.deb
+  - name: firefox_97.0+build2-0ubuntu0.20.04.1_amd64.deb
+    url: https://s3.amazonaws.com/vagrant.testeng.edx.org/firefox_97.0%2Bbuild2-0ubuntu0.20.04.1_amd64.deb
+  - name: google-chrome-stable_current_amd64.deb
+    url: https://s3.amazonaws.com/vagrant.testeng.edx.org/google-chrome-stable_current_amd64.deb
 
 trusty_browser_s3_deb_pkgs:
   - name: firefox-mozilla-build_42.0-0ubuntu1_amd64.deb
     url: https://s3.amazonaws.com/vagrant.testeng.edx.org/firefox-mozilla-build_42.0-0ubuntu1_amd64.deb
-  - name: google-chrome-stable_68.0.3440.84-1_amd64.deb
-    url: https://s3.amazonaws.com/vagrant.testeng.edx.org/google-chrome-stable_68.0.3440.84-1_amd64.deb
+  - name: google-chrome-stable_current_amd64.deb
+    url: https://s3.amazonaws.com/vagrant.testeng.edx.org/google-chrome-stable_current_amd64.deb
 
 # GeckoDriver
-geckodriver_url: "https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz"
+geckodriver_url: "https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz"
 
 # ChromeDriver
-chromedriver_version: 2.41
+chromedriver_version: 98.0.4758.102
 chromedriver_url: "http://chromedriver.storage.googleapis.com/{{ chromedriver_version }}/chromedriver_linux64.zip"
 
 # PhantomJS

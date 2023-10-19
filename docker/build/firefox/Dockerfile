@@ -1,4 +1,4 @@
-FROM selenium/standalone-firefox-debug:3.14.0-arsenic
+FROM selenium/standalone-firefox-debug:4.1.2-20220217
 LABEL maintainer="edxops"
 
 USER root

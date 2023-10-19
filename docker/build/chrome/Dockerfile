@@ -1,4 +1,4 @@
-FROM selenium/standalone-chrome-debug:3.14.0-arsenic
+FROM selenium/standalone-chrome-debug:4.1.2-20220217
 LABEL maintainer="edxops"
 
 USER root
