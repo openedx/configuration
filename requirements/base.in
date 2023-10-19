@@ -8,7 +8,7 @@ boto3
 datadog==0.8.0
 docopt==0.6.2
 ecdsa==0.13.3
-Jinja2==2.8
+Jinja2==2.11.3
 markupsafe==2.0.1                  # Pining this until we upgrade jinja2, as in newer version on markupsafe soft_unicode is removed and jinja2==2.8 use this pkg
 mysqlclient==1.4.6                 # Needed for the mysql_db module, 1,4,6 is the newest version that support python 2 which we really need to stop using
 networkx==1.11

@@ -52,7 +52,7 @@ ecdsa==0.13.3
     # via -r requirements/base.in
 idna==3.4
     # via requests
-jinja2==2.8
+jinja2==2.11.3
     # via
     #   -r requirements/base.in
     #   ansible-base
