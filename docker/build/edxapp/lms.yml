@@ -339,7 +339,7 @@ JWT_EXPIRATION: 30
 JWT_ISSUER: http://localhost:18000/oauth2
 JWT_PRIVATE_SIGNING_KEY: null
 LANGUAGE_CODE: en
-LANGUAGE_COOKIE: openedx-language-preference
+LANGUAGE_COOKIE_NAME: openedx-language-preference
 LEARNER_PORTAL_URL_ROOT: https://learner-portal-edx.devstack.lms:18000
 LMS_BASE: edx.devstack.lms:18000
 LMS_INTERNAL_ROOT_URL: http://edx.devstack.lms:18000
