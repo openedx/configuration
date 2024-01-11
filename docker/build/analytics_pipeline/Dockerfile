@@ -95,6 +95,7 @@ RUN curl -fSL "$SPARK_URL" -o /var/tmp/$SPARK_DIST_FILE \
     && tar -xzf /var/tmp/$SPARK_DIST_FILE -C $SPARK_HOME --strip-components=1 \
     && echo 'spark.master  spark://sparkmaster:7077\nspark.eventLog.enabled  true\nspark.eventLog.dir  hdfs://namenode:8020/tmp/spark-events\nspark.history.fs.logDirectory  hdfs://namenode:8020/tmp/spark-events\nspark.sql.warehouse.dir hdfs://namenode:8020/spark-warehouse' > $SPARK_HOME/conf/spark-defaults.conf \
     && rm -f /var/tmp/$SPARK_DIST_FILE
+ADD docker/build/analytics_pipeline/spark-log4j.properties $SPARK_HOME/conf/log4j.properties
 
 # SQOOP
 RUN curl -fSL "$SQOOP_URL" -o /var/tmp/$SQOOP_DIST_FILE \
