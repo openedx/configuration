@@ -1,13 +1,13 @@
 ---
 
 RBENV_VERSION: 'v1.0.0'
-RBENV_BUNDLER_VERSION: '2.3.4'
+RBENV_BUNDLER_VERSION: '2.4.0'
 RBENV_RAKE_VERSION: '13.0.6'
 rbenv_root: "{{ rbenv_dir }}/.rbenv"
 rbenv_gem_root: "{{ rbenv_dir }}/.gem"
 rbenv_gem_bin: "{{ rbenv_gem_root }}/bin"
 rbenv_gemfile: 'Gemfile3'
-RBENV_RUBYGEMS_VERSION: '3.2.33'
+RBENV_RUBYGEMS_VERSION: '3.3.3'
 rbenv_bin: "{{ rbenv_dir }}/.rbenv/bin"
 rbenv_shims: "{{ rbenv_root }}/shims"
 rbenv_path: "{{ rbenv_bin }}:{{ rbenv_shims }}:{{ rbenv_gem_bin }}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

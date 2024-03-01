@@ -102,7 +102,7 @@ devstack_forum_env:
   MONGOID_AUTH_MECH: "{{ FORUM_MONGO_AUTH_MECH }}"
 
 forum_user: "forum"
-FORUM_RUBY_VERSION: "3.0.4"
+FORUM_RUBY_VERSION: "3.1.0"
 forum_source_repo: "https://github.com/openedx/cs_comments_service.git"
 FORUM_VERSION: "master"
 

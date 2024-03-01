@@ -60,6 +60,15 @@
     - install
     - install:app-requirements
 
+- name: configure nokogiri package
+  shell: "bundle config build.nokogiri --use-system-libraries chdir={{ forum_code_dir }}"
+  become_user: "{{ forum_user }}"
+  environment: "{{ forum_base_env }}"
+  notify: restart the forum service
+  tags:
+    - install
+    - install:app-requirements
+
 - name: install comments service bundle
   shell: "bundle install chdir={{ forum_code_dir }}"
   become_user: "{{ forum_user }}"
