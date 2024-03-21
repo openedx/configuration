@@ -53,31 +53,31 @@
 
 
 # Ensure that we can install old software if need be.
-- name: Add edX PPA apt key
-  apt_key:
-    id: "{{ COMMON_EDX_PPA_KEY_ID }}"
-    keyserver: "{{ COMMON_EDX_PPA_KEY_SERVER }}"
-    state: "present"
-  when: >
-    ansible_distribution in common_debian_variants and
-    ansible_distribution_release != 'bionic'
+#- name: Add edX PPA apt key
+#  apt_key:
+#    id: "{{ COMMON_EDX_PPA_KEY_ID }}"
+#    keyserver: "{{ COMMON_EDX_PPA_KEY_SERVER }}"
+#    state: "present"
+#  when: >
+#    ansible_distribution in common_debian_variants and
+#    ansible_distribution_release != 'bionic'
 
-- name: Update expired apt keys
-  shell: apt-key adv --recv-keys --keyserver {{ COMMON_EDX_PPA_KEY_SERVER }} {{ COMMON_EDX_PPA_KEY_ID }}
-  when: >
-    ansible_distribution in common_debian_variants and
-    ansible_distribution_release != 'bionic'
+#- name: Update expired apt keys
+#  shell: apt-key adv --recv-keys --keyserver {{ COMMON_EDX_PPA_KEY_SERVER }} {{ COMMON_EDX_PPA_KEY_ID }}
+#  when: >
+#    ansible_distribution in common_debian_variants and
+#    ansible_distribution_release != 'bionic'
+#
 
-
-- name: Add custom edX PPA
-  # Ensure that we get the latest version of python 2.7
-  # MySQL 5.6 is from our own PPA: https://bugs.mysql.com/bug.php?id=84848
-  apt_repository:
-    repo: "{{ COMMON_EDX_PPA }}"
-  when: >
-    ansible_distribution in common_debian_variants and
-    ansible_distribution_release != 'bionic'
-
+#- name: Add custom edX PPA
+#  # Ensure that we get the latest version of python 2.7
+#  # MySQL 5.6 is from our own PPA: https://bugs.mysql.com/bug.php?id=84848
+#  apt_repository:
+#    repo: "{{ COMMON_EDX_PPA }}"
+#  when: >
+#    ansible_distribution in common_debian_variants and
+#    ansible_distribution_release != 'bionic'
+#
 
 - name: Install role-independent useful system packages
   # do this before log dir setup; rsyslog package guarantees syslog user present

@@ -98,7 +98,7 @@
   apt:
     name: "{{ item }}"
     state: present
-    update_cache: yes
+    update_cache: no
   with_flattened:
     - "{{ edxapp_debian_pkgs_default }}"
     - "{{ edxapp_debian_pkgs_extra }}"

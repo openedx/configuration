@@ -39,7 +39,7 @@ supervisor_service_user: "{{ common_web_user }}"
 supervisor_version: 3.2.3
 
 supervisor_pip_pkgs:
-  - boto=="{{ common_boto_version }}"
+  - boto==2.48.0
   - python-simple-hipchat
 
 supervisor_spec:

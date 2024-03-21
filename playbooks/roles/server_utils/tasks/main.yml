@@ -10,31 +10,31 @@
 #
 #
 # Tasks for role server_utils
-# 
+#
 # Overview:
 #
 # Install useful interactive utilities for triange and debugging purposes.
 # Typically these would not need to be available on servers as shell access
 # is uneccessary.
-# 
+#
 # Example play:
 #
 #
 
-- name: Check for expired edx key
-  command: "apt-key list | grep {{ SERVER_UTILS_EDX_PPA_KEY_ID }}"
-  register: ppa_key_status
-  when: ansible_distribution in common_debian_variants
+#- name: Check for expired edx key
+#  command: "apt-key list | grep {{ SERVER_UTILS_EDX_PPA_KEY_ID }}"
+#  register: ppa_key_status
+#  when: ansible_distribution in common_debian_variants
 
-- name: remove expired edx key
-  command: "sudo apt-key adv --keyserver {{ SERVER_UTILS_EDX_PPA_KEY_SERVER }} --recv-keys {{ SERVER_UTILS_EDX_PPA_KEY_ID }}"
-  when: ansible_distribution in common_debian_variants and 'expired' in ppa_key_status.stdout
+#- name: remove expired edx key
+#  command: "sudo apt-key adv --keyserver {{ SERVER_UTILS_EDX_PPA_KEY_SERVER }} --recv-keys {{ SERVER_UTILS_EDX_PPA_KEY_ID }}"
+#  when: ansible_distribution in common_debian_variants and 'expired' in ppa_key_status.stdout
 
 - name: Install ubuntu system packages
   apt:
     name: "{{ item }}"
     install_recommends: yes
-    state: present 
+    state: present
     update_cache: yes
   with_items: "{{ server_utils_debian_pkgs }}"
   when: ansible_distribution in common_debian_variants
