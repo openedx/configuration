@@ -1,3 +1,14 @@
+Deprecation Notice
+##################
+
+Going forward, the configuration will be primarily used for development by 2U. The community is
+recommended to use `Tutor`_ to deploy to production environments.
+
+For more information on this deprecation, please visit `the associated deprecation ticket`_.
+
+.. _Tutor: https://docs.tutor.edly.io/
+.. _the associated deprecation ticket: https://github.com/openedx/public-engineering/issues/51
+
 Configuration Management
 ########################
 
