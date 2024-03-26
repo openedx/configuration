@@ -1,4 +1,4 @@
-- name: Deploy edX designer
+- name: Deploy enterprise-catalog
   hosts: all
   become: True
   gather_facts: True

@@ -1,0 +1,22 @@
+---
+#
+# edX Configuration
+#
+# github:     https://github.com/openedx/configuration
+# wiki:       https://openedx.atlassian.net/wiki/display/OpenOPS
+# code style: https://openedx.atlassian.net/wiki/display/OpenOPS/Ansible+Code+Conventions
+# license:    https://github.com/openedx/configuration/blob/master/LICENSE.TXT
+#
+#
+#
+# Tasks for role enterprise_subsidy
+#
+# Overview: This role's tasks come from edx_django_service.
+#
+#
+# Dependencies:
+#
+#
+# Example play:
+#
+#

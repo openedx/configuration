@@ -1,0 +1,174 @@
+---
+#
+# edX Configuration
+#
+# github:     https://github.com/openedx/configuration
+# wiki:       https://openedx.atlassian.net/wiki/display/OpenOPS
+# code style: https://openedx.atlassian.net/wiki/spaces/OpenOPS/pages/26837527/Ansible+Code+Conventions
+# license:    https://github.com/openedx/configuration/blob/master/LICENSE.TXT
+#
+##
+# Defaults for role enterprise_access
+#
+
+
+#
+# vars are namespace with the module name.
+#
+enterprise_access_service_name: 'enterprise_access'
+
+enterprise_access_user: "{{ enterprise_access_service_name }}"
+enterprise_access_home: "{{ COMMON_APP_DIR }}/{{ enterprise_access_service_name }}"
+enterprise_access_app_dir: "{{ COMMON_APP_DIR }}/{{ enterprise_access_service_name }}"
+enterprise_access_code_dir: "{{ enterprise_access_app_dir }}/{{ enterprise_access_service_name }}"
+enterprise_access_venvs_dir: "{{ enterprise_access_app_dir }}/venvs"
+enterprise_access_venv_dir: "{{ enterprise_access_venvs_dir }}/enterprise_access"
+
+enterprise_access_celery_default_queue: 'enterprise_access.default'
+
+enterprise_access_hostname: 'enterprise-access'
+
+ENTERPRISE_ACCESS_CELERY_ALWAYS_EAGER: false
+ENTERPRISE_ACCESS_CELERY_BROKER_TRANSPORT: ''
+ENTERPRISE_ACCESS_CELERY_BROKER_USER: ''
+ENTERPRISE_ACCESS_CELERY_BROKER_PASSWORD: ''
+ENTERPRISE_ACCESS_CELERY_BROKER_HOSTNAME: ''
+ENTERPRISE_ACCESS_CELERY_BROKER_VHOST: ''
+
+ENTERPRISE_ACCESS_USE_PYTHON38: True
+
+ENTERPRISE_ACCESS_ENVIRONMENT_EXTRA: {}
+
+enterprise_access_environment:
+  ENTERPRISE_ACCESS_CFG: '{{ COMMON_CFG_DIR }}/{{ enterprise_access_service_name }}.yml'
+
+enterprise_access_gunicorn_port: 8270
+
+enterprise_access_debian_pkgs: []
+
+ENTERPRISE_ACCESS_ENABLE_EXPERIMENTAL_DOCKER_SHIM: false
+
+ENTERPRISE_ACCESS_NGINX_PORT: '1{{ enterprise_access_gunicorn_port }}'
+ENTERPRISE_ACCESS_SSL_NGINX_PORT: '4{{ enterprise_access_gunicorn_port }}'
+
+ENTERPRISE_ACCESS_DEFAULT_DB_NAME: 'enterprise_access'
+ENTERPRISE_ACCESS_MYSQL_HOST: 'localhost'
+# MySQL usernames are limited to 16 characters
+ENTERPRISE_ACCESS_MYSQL_USER: 'entaccess001'
+ENTERPRISE_ACCESS_MYSQL_PASSWORD: 'password'
+
+ENTERPRISE_ACCESS_MEMCACHE: [ 'localhost:11211' ]
+# The memcache config of edx_django_service is overriden in defaults/main.yml to use PyMemcacheCache
+# as enterprise-access runs on Django 4.2 which doesn't support MemcachedCache backend.
+ENTERPRISE_ACCESS_MEMCACHE_BACKEND: 'django.core.cache.backends.memcached.PyMemcacheCache'
+
+ENTERPRISE_ACCESS_DJANGO_SETTINGS_MODULE: 'enterprise_access.settings.production'
+ENTERPRISE_ACCESS_DOMAIN: 'localhost'
+ENTERPRISE_ACCESS_URL_ROOT: 'http://{{ ENTERPRISE_ACCESS_DOMAIN }}:{{ ENTERPRISE_ACCESS_NGINX_PORT }}'
+ENTERPRISE_ACCESS_LOGOUT_URL: '{{ ENTERPRISE_ACCESS_URL_ROOT }}/logout/'
+
+ENTERPRISE_ACCESS_LANGUAGE_CODE: 'en'
+ENTERPRISE_ACCESS_LANGUAGE_COOKIE_NAME: 'openedx-language-preference'
+
+ENTERPRISE_ACCESS_SERVICE_USER: 'enterprise_access_service_user'
+
+ENTERPRISE_ACCESS_DATA_DIR: '{{ COMMON_DATA_DIR }}/{{ enterprise_access_service_name }}'
+ENTERPRISE_ACCESS_MEDIA_ROOT: '{{ ENTERPRISE_ACCESS_DATA_DIR }}/media'
+ENTERPRISE_ACCESS_MEDIA_URL: '/media/'
+
+ENTERPRISE_ACCESS_MEDIA_STORAGE_BACKEND:
+DEFAULT_FILE_STORAGE: 'django.core.files.storage.FileSystemStorage'
+MEDIA_ROOT: '{{ ENTERPRISE_ACCESS_MEDIA_ROOT }}'
+MEDIA_URL: '{{ ENTERPRISE_ACCESS_MEDIA_URL }}'
+
+ENTERPRISE_ACCESS_STATIC_ROOT: '{{ ENTERPRISE_ACCESS_DATA_DIR }}/staticfiles'
+ENTERPRISE_ACCESS_STATIC_URL: '/static/'
+
+ENTERPRISE_ACCESS_STATICFILES_STORAGE: 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+ENTERPRISE_ACCESS_CORS_ORIGIN_ALLOW_ALL: false
+ENTERPRISE_ACCESS_CORS_ORIGIN_WHITELIST_DEFAULT:
+- '{{ ENTERPRISE_ACCESS_URL_ROOT }}'
+
+ENTERPRISE_ACCESS_CORS_ORIGIN_WHITELIST_EXTRA: []
+ENTERPRISE_ACCESS_CORS_ORIGIN_WHITELIST: '{{ ENTERPRISE_ACCESS_CORS_ORIGIN_WHITELIST_DEFAULT + ENTERPRISE_ACCESS_CORS_ORIGIN_WHITELIST_EXTRA }}'
+ENTERPRISE_ACCESS_CSRF_TRUSTED_ORIGINS: []
+
+ENTERPRISE_ACCESS_VERSION: 'main'
+
+ENTERPRISE_ACCESS_GUNICORN_EXTRA: ''
+
+ENTERPRISE_ACCESS_EXTRA_APPS: []
+
+ENTERPRISE_ACCESS_SESSION_EXPIRE_AT_BROWSER_CLOSE: false
+
+enterprise_access_service_config_overrides:
+  LANGUAGE_COOKIE_NAME: '{{ ENTERPRISE_ACCESS_LANGUAGE_COOKIE_NAME }}'
+  CSRF_COOKIE_SECURE: '{{ ENTERPRISE_ACCESS_CSRF_COOKIE_SECURE }}'
+  CSRF_TRUSTED_ORIGINS: '{{ ENTERPRISE_ACCESS_CSRF_TRUSTED_ORIGINS }}'
+  CELERY_ALWAYS_EAGER: '{{ ENTERPRISE_ACCESS_CELERY_ALWAYS_EAGER }}'
+  CELERY_BROKER_TRANSPORT: '{{ ENTERPRISE_ACCESS_CELERY_BROKER_TRANSPORT }}'
+  CELERY_BROKER_USER: '{{ ENTERPRISE_ACCESS_CELERY_BROKER_USER }}'
+  CELERY_BROKER_PASSWORD: '{{ ENTERPRISE_ACCESS_CELERY_BROKER_PASSWORD }}'
+  CELERY_BROKER_HOSTNAME: '{{ ENTERPRISE_ACCESS_CELERY_BROKER_HOSTNAME }}'
+  CELERY_BROKER_VHOST: '{{ ENTERPRISE_ACCESS_CELERY_BROKER_VHOST }}'
+  CELERY_DEFAULT_EXCHANGE: 'enterprise_access'
+  CELERY_DEFAULT_ROUTING_KEY: 'enterprise_access'
+  CELERY_DEFAULT_QUEUE: '{{ enterprise_access_celery_default_queue }}'
+  CORS_ORIGIN_WHITELIST: "{{ ENTERPRISE_ACCESS_CORS_ORIGIN_WHITELIST }}"
+  EDX_DRF_EXTENSIONS:
+    OAUTH2_USER_INFO_URL: '{{ COMMON_LMS_BASE_URL }}/user_info'
+    JWT_PAYLOAD_USER_ATTRIBUTE_MAPPING: {
+      "administrator": "is_staff",
+      "email": "email",
+      "full_name": "full_name",
+      "user_id": "lms_user_id",
+    }
+
+# Enterprise Access doesn't read the URLs for other services like LMS, License Manager..etc.,
+# from the environment variables. They should be passed as extra configs
+ENTERPRISE_ACCESS_SERVICE_CONFIG_EXTRA: {}
+
+# See edx_django_service_automated_users for an example of what this should be
+ENTERPRISE_ACCESS_AUTOMATED_USERS: {}
+
+ENTERPRISE_ACCESS_CSRF_COOKIE_SECURE: false
+
+ENTERPRISE_ACCESS_ENABLE_NEWRELIC_DISTRIBUTED_TRACING: false
+
+enterprise_access_post_migrate_commands: []
+
+ENTERPRISE_ACCESS_SOCIAL_AUTH_EDX_OAUTH2_KEY: 'enterprise-access-sso-key'
+ENTERPRISE_ACCESS_SOCIAL_AUTH_EDX_OAUTH2_SECRET: 'enterprise-access-sso-secret'
+ENTERPRISE_ACCESS_BACKEND_SERVICE_EDX_OAUTH2_KEY: 'enterprise-access-backend-service-key'
+ENTERPRISE_ACCESS_BACKEND_SERVICE_EDX_OAUTH2_SECRET: 'enterprise-access-backend-service-secret'
+
+ENTERPRISE_ACCESS_GIT_IDENTITY: !!null
+
+ENTERPRISE_ACCESS_REPOS:
+  - PROTOCOL: '{{ COMMON_GIT_PROTOCOL }}'
+    DOMAIN: '{{ COMMON_GIT_MIRROR }}'
+    PATH: '{{ COMMON_GIT_PATH }}'
+    REPO: 'enterprise-access.git'
+    VERSION: '{{ ENTERPRISE_ACCESS_VERSION }}'
+    DESTINATION: "{{ enterprise_access_code_dir }}"
+    SSH_KEY: '{{ ENTERPRISE_ACCESS_GIT_IDENTITY }}'
+
+ENTERPRISE_ACCESS_SECRET_KEY: 'SET-ME-PLEASE'
+
+# Remote config
+ENTERPRISE_ACCESS_HERMES_ENABLED: "{{ COMMON_HERMES_ENABLED }}"
+
+ENTERPRISE_ACCESS_DECRYPT_CONFIG_ENABLED: "{{ COMMON_DECRYPT_CONFIG_ENABLED }}"
+ENTERPRISE_ACCESS_COPY_CONFIG_ENABLED: "{{ COMMON_COPY_CONFIG_ENABLED }}"
+
+ENTERPRISE_ACCESS_ENABLE_ADMIN_URLS_RESTRICTION: false
+ENTERPRISE_ACCESS_ADMIN_URLS:
+  - admin
+
+# Worker settings
+worker_django_settings_module: "{{ ENTERPRISE_ACCESS_DJANGO_SETTINGS_MODULE }}"
+ENTERPRISE_ACCESS_CELERY_WORKERS:
+  - queue: '{{ enterprise_access_celery_default_queue }}'
+    concurrency: 4
+    monitor: True

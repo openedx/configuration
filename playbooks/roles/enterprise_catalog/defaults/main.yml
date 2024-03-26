@@ -76,7 +76,8 @@ DEFAULT_FILE_STORAGE: 'django.core.files.storage.FileSystemStorage'
 MEDIA_ROOT: '{{ ENTERPRISE_CATALOG_MEDIA_ROOT }}'
 MEDIA_URL: '{{ ENTERPRISE_CATALOG_MEDIA_URL }}'
 
-# TODO: Let edx_django_service manage ENTERPRISE_CATALOG_STATIC_ROOT in phase 2.
+# TODO: Let edx_django_service manage ENTERPRISE_CATALOG_STATIC_ROOT in phase 2. Also, update enterprise_access and
+# enterprise_subsidy.
 ENTERPRISE_CATALOG_STATIC_ROOT: '{{ ENTERPRISE_CATALOG_DATA_DIR }}/staticfiles'
 ENTERPRISE_CATALOG_STATIC_URL: '/static/'
 

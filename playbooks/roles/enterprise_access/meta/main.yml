@@ -1,0 +1,63 @@
+---
+#
+# edX Configuration
+#
+# github:     https://github.com/openedx/configuration
+# wiki:       https://openedx.atlassian.net/wiki/display/OpenOPS
+# code style: https://openedx.atlassian.net/wiki/display/OpenOPS/Ansible+Code+Conventions
+# license:    https://github.com/openedx/configuration/blob/master/LICENSE.TXT
+#
+##
+# Role includes for role enterprise_access
+
+dependencies:
+  - role: edx_django_service
+    edx_django_service_use_python38: '{{ ENTERPRISE_ACCESS_USE_PYTHON38 }}'
+    edx_django_service_enable_experimental_docker_shim: '{{ ENTERPRISE_ACCESS_ENABLE_EXPERIMENTAL_DOCKER_SHIM }}'
+    edx_django_service_version: '{{ ENTERPRISE_ACCESS_VERSION }}'
+    edx_django_service_name: '{{ enterprise_access_service_name }}'
+    edx_django_service_config_overrides: '{{ enterprise_access_service_config_overrides | combine(ENTERPRISE_ACCESS_SERVICE_CONFIG_EXTRA) }}'
+    edx_django_service_debian_pkgs_extra: '{{ enterprise_access_debian_pkgs }}'
+    edx_django_service_gunicorn_port: '{{ enterprise_access_gunicorn_port }}'
+    edx_django_service_repos: '{{ ENTERPRISE_ACCESS_REPOS }}'
+    edx_django_service_django_settings_module: '{{ ENTERPRISE_ACCESS_DJANGO_SETTINGS_MODULE }}'
+    edx_django_service_environment_extra: '{{ enterprise_access_environment | combine(ENTERPRISE_ACCESS_ENVIRONMENT_EXTRA) }}'
+    edx_django_service_gunicorn_extra: '{{ ENTERPRISE_ACCESS_GUNICORN_EXTRA }}'
+    edx_django_service_nginx_port: '{{ ENTERPRISE_ACCESS_NGINX_PORT }}'
+    edx_django_service_ssl_nginx_port: '{{ ENTERPRISE_ACCESS_SSL_NGINX_PORT }}'
+    edx_django_service_language_code: '{{ ENTERPRISE_ACCESS_LANGUAGE_CODE }}'
+    edx_django_service_secret_key: '{{ ENTERPRISE_ACCESS_SECRET_KEY }}'
+    edx_django_service_media_storage_backend: '{{ ENTERPRISE_ACCESS_MEDIA_STORAGE_BACKEND }}'
+    edx_django_service_staticfiles_storage: '{{ ENTERPRISE_ACCESS_STATICFILES_STORAGE }}'
+    edx_django_service_memcache: '{{ ENTERPRISE_ACCESS_MEMCACHE }}'
+    edx_django_service_caches:
+      default:
+        BACKEND: '{{ ENTERPRISE_ACCESS_MEMCACHE_BACKEND }}'
+        KEY_PREFIX: '{{ edx_django_service_name }}'
+        LOCATION: '{{ edx_django_service_memcache }}'
+    edx_django_service_default_db_host: '{{ ENTERPRISE_ACCESS_MYSQL_HOST }}'
+    edx_django_service_default_db_name: '{{ ENTERPRISE_ACCESS_DEFAULT_DB_NAME }}'
+    edx_django_service_default_db_atomic_requests: false
+    edx_django_service_db_user: '{{ ENTERPRISE_ACCESS_MYSQL_USER }}'
+    edx_django_service_db_password: '{{ ENTERPRISE_ACCESS_MYSQL_PASSWORD }}'
+    edx_django_service_extra_apps: '{{ ENTERPRISE_ACCESS_EXTRA_APPS }}'
+    edx_django_service_session_expire_at_browser_close: '{{ ENTERPRISE_ACCESS_SESSION_EXPIRE_AT_BROWSER_CLOSE }}'
+    edx_django_service_social_auth_edx_oauth2_key: '{{ ENTERPRISE_ACCESS_SOCIAL_AUTH_EDX_OAUTH2_KEY }}'
+    edx_django_service_social_auth_edx_oauth2_secret: '{{ ENTERPRISE_ACCESS_SOCIAL_AUTH_EDX_OAUTH2_SECRET }}'
+    edx_django_service_backend_service_edx_oauth2_key: '{{ ENTERPRISE_ACCESS_BACKEND_SERVICE_EDX_OAUTH2_KEY }}'
+    edx_django_service_backend_service_edx_oauth2_secret: '{{ ENTERPRISE_ACCESS_BACKEND_SERVICE_EDX_OAUTH2_SECRET }}'
+    edx_django_service_automated_users: '{{ ENTERPRISE_ACCESS_AUTOMATED_USERS }}'
+    edx_django_service_cors_whitelist: '{{ ENTERPRISE_ACCESS_CORS_ORIGIN_WHITELIST }}'
+    edx_django_service_post_migrate_commands: '{{ enterprise_access_post_migrate_commands }}'
+    edx_django_service_enable_newrelic_distributed_tracing: '{{ ENTERPRISE_ACCESS_ENABLE_NEWRELIC_DISTRIBUTED_TRACING }}'
+    edx_django_service_decrypt_config_enabled: '{{ ENTERPRISE_ACCESS_DECRYPT_CONFIG_ENABLED }}'
+    edx_django_service_copy_config_enabled: '{{ ENTERPRISE_ACCESS_COPY_CONFIG_ENABLED }}'
+    edx_django_service_migration_check_services: '{{ enterprise_access_service_name }},{{ enterprise_access_service_name }}_workers'
+    edx_django_service_enable_celery_workers: true
+    edx_django_service_workers: '{{ ENTERPRISE_ACCESS_CELERY_WORKERS }}'
+    # Need this override because the existing AWS ASGs have a services tag with a name that doesn't match the convention
+    edx_django_service_workers_supervisor_conf: 'enterprise_access_worker.conf'
+    edx_django_service_docker_image_name: 'openedx/enterprise-access'
+    edx_django_service_hostname: '~^((stage|prod)-)?{{ enterprise_access_hostname }}.*'
+    EDX_DJANGO_SERVICE_ENABLE_ADMIN_URLS_RESTRICTION: '{{ ENTERPRISE_ACCESS_ENABLE_ADMIN_URLS_RESTRICTION }}'
+    EDX_DJANGO_SERVICE_ADMIN_URLS: '{{ ENTERPRISE_ACCESS_ADMIN_URLS }}'

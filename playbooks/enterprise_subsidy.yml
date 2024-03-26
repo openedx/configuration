@@ -1,0 +1,28 @@
+- name: Deploy enterprise-subsidy
+  hosts: all
+  become: True
+  gather_facts: True
+  vars:
+    ENABLE_NEWRELIC: True
+    CLUSTER_NAME: 'enterprise_subsidy'
+    # enterprise-subsidy by default uses Memcache for caching. If a different cache is used, set
+    # this to false and set ENTERPRISE_SUBSIDY_MEMCACHE and ENTERPRISE_SUBSIDY_MEMCACHE_BACKEND
+    # to appropriate values.
+    ENTERPRISE_SUBSIDY_MEMCACHE_ENABLED: true
+    ENTERPRISE_SUBSIDY_HERMES_ENABLED: false
+  roles:
+    - role: aws
+      when: COMMON_ENABLE_AWS_ROLE
+    - role: nginx
+      nginx_default_sites:
+        - enterprise_subsidy
+    - role: memcache
+      when: ENTERPRISE_SUBSIDY_MEMCACHE_ENABLED
+    - enterprise_subsidy
+    - role: splunkforwarder
+      when: COMMON_ENABLE_SPLUNKFORWARDER
+    - role: newrelic_infrastructure
+      when: COMMON_ENABLE_NEWRELIC_INFRASTRUCTURE
+    - role: hermes
+      HERMES_TARGET_SERVICE: 'enterprise_subsidy'
+      when: ENTERPRISE_SUBSIDY_HERMES_ENABLED

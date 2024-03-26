@@ -1,0 +1,143 @@
+---
+#
+# edX Configuration
+#
+# github:     https://github.com/openedx/configuration
+# wiki:       https://openedx.atlassian.net/wiki/display/OpenOPS
+# code style: https://openedx.atlassian.net/wiki/spaces/OpenOPS/pages/26837527/Ansible+Code+Conventions
+# license:    https://github.com/openedx/configuration/blob/master/LICENSE.TXT
+#
+##
+# Defaults for role enterprise_subsidy
+#
+
+
+#
+# vars are namespace with the module name.
+#
+enterprise_subsidy_service_name: 'enterprise_subsidy'
+
+enterprise_subsidy_user: "{{ enterprise_subsidy_service_name }}"
+enterprise_subsidy_home: "{{ COMMON_APP_DIR }}/{{ enterprise_subsidy_service_name }}"
+enterprise_subsidy_app_dir: "{{ COMMON_APP_DIR }}/{{ enterprise_subsidy_service_name }}"
+enterprise_subsidy_code_dir: "{{ enterprise_subsidy_app_dir }}/{{ enterprise_subsidy_service_name }}"
+enterprise_subsidy_venvs_dir: "{{ enterprise_subsidy_app_dir }}/venvs"
+enterprise_subsidy_venv_dir: "{{ enterprise_subsidy_venvs_dir }}/enterprise_subsidy"
+
+enterprise_subsidy_hostname: 'enterprise-subsidy'
+
+ENTERPRISE_SUBSIDY_USE_PYTHON38: True
+
+ENTERPRISE_SUBSIDY_ENVIRONMENT_EXTRA: {}
+
+enterprise_subsidy_environment:
+  EDX_ENTERPRISE_SUBSIDY_CFG: '{{ COMMON_CFG_DIR }}/{{ enterprise_subsidy_service_name }}.yml'
+
+enterprise_subsidy_gunicorn_port: 8280
+
+enterprise_subsidy_debian_pkgs: []
+
+ENTERPRISE_SUBSIDY_ENABLE_EXPERIMENTAL_DOCKER_SHIM: false
+
+ENTERPRISE_SUBSIDY_NGINX_PORT: '1{{ enterprise_subsidy_gunicorn_port }}'
+ENTERPRISE_SUBSIDY_SSL_NGINX_PORT: '4{{ enterprise_subsidy_gunicorn_port }}'
+
+ENTERPRISE_SUBSIDY_DEFAULT_DB_NAME: 'enterprise_subsidy'
+ENTERPRISE_SUBSIDY_MYSQL_HOST: 'localhost'
+# MySQL usernames are limited to 16 characters
+ENTERPRISE_SUBSIDY_MYSQL_USER: 'entsubsidy001'
+ENTERPRISE_SUBSIDY_MYSQL_PASSWORD: 'password'
+
+ENTERPRISE_SUBSIDY_MEMCACHE: [ 'localhost:11211' ]
+# The memcache config of edx_django_service is overriden in defaults/main.yml to use PyMemcacheCache
+# as enterprise-subsidy runs on Django 4.2 which doesn't support MemcachedCache backend.
+ENTERPRISE_SUBSIDY_MEMCACHE_BACKEND: 'django.core.cache.backends.memcached.PyMemcacheCache'
+
+ENTERPRISE_SUBSIDY_DJANGO_SETTINGS_MODULE: 'enterprise_subsidy.settings.production'
+ENTERPRISE_SUBSIDY_DOMAIN: 'localhost'
+ENTERPRISE_SUBSIDY_URL_ROOT: 'http://{{ ENTERPRISE_SUBSIDY_DOMAIN }}:{{ ENTERPRISE_SUBSIDY_NGINX_PORT }}'
+ENTERPRISE_SUBSIDY_LOGOUT_URL: '{{ ENTERPRISE_SUBSIDY_URL_ROOT }}/logout/'
+
+ENTERPRISE_SUBSIDY_LANGUAGE_CODE: 'en'
+ENTERPRISE_SUBSIDY_LANGUAGE_COOKIE_NAME: 'openedx-language-preference'
+
+ENTERPRISE_SUBSIDY_SERVICE_USER: 'enterprise_subsidy_service_user'
+
+ENTERPRISE_SUBSIDY_DATA_DIR: '{{ COMMON_DATA_DIR }}/{{ enterprise_subsidy_service_name }}'
+ENTERPRISE_SUBSIDY_MEDIA_ROOT: '{{ ENTERPRISE_SUBSIDY_DATA_DIR }}/media'
+ENTERPRISE_SUBSIDY_MEDIA_URL: '/media/'
+
+ENTERPRISE_SUBSIDY_MEDIA_STORAGE_BACKEND:
+DEFAULT_FILE_STORAGE: 'django.core.files.storage.FileSystemStorage'
+MEDIA_ROOT: '{{ ENTERPRISE_SUBSIDY_MEDIA_ROOT }}'
+MEDIA_URL: '{{ ENTERPRISE_SUBSIDY_MEDIA_URL }}'
+
+ENTERPRISE_SUBSIDY_STATIC_ROOT: '{{ ENTERPRISE_SUBSIDY_DATA_DIR }}/staticfiles'
+ENTERPRISE_SUBSIDY_STATIC_URL: '/static/'
+
+ENTERPRISE_SUBSIDY_STATICFILES_STORAGE: 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+ENTERPRISE_SUBSIDY_CORS_ORIGIN_ALLOW_ALL: false
+ENTERPRISE_SUBSIDY_CORS_ORIGIN_WHITELIST_DEFAULT:
+- '{{ ENTERPRISE_SUBSIDY_URL_ROOT }}'
+
+ENTERPRISE_SUBSIDY_CORS_ORIGIN_WHITELIST_EXTRA: []
+ENTERPRISE_SUBSIDY_CORS_ORIGIN_WHITELIST: '{{ ENTERPRISE_SUBSIDY_CORS_ORIGIN_WHITELIST_DEFAULT + ENTERPRISE_SUBSIDY_CORS_ORIGIN_WHITELIST_EXTRA }}'
+
+ENTERPRISE_SUBSIDY_VERSION: 'main'
+
+ENTERPRISE_SUBSIDY_GUNICORN_EXTRA: ''
+
+ENTERPRISE_SUBSIDY_EXTRA_APPS: []
+
+ENTERPRISE_SUBSIDY_SESSION_EXPIRE_AT_BROWSER_CLOSE: false
+
+enterprise_subsidy_service_config_overrides:
+  LANGUAGE_COOKIE_NAME: '{{ ENTERPRISE_SUBSIDY_LANGUAGE_COOKIE_NAME }}'
+  CSRF_COOKIE_SECURE: "{{ ENTERPRISE_SUBSIDY_CSRF_COOKIE_SECURE }}"
+  CORS_ORIGIN_WHITELIST: "{{ ENTERPRISE_SUBSIDY_CORS_ORIGIN_WHITELIST }}"
+  EDX_DRF_EXTENSIONS:
+    OAUTH2_USER_INFO_URL: '{{ COMMON_LMS_BASE_URL }}/user_info'
+    JWT_PAYLOAD_USER_ATTRIBUTE_MAPPING: {
+      "administrator": "is_staff",
+      "email": "email",
+      "full_name": "full_name",
+      "user_id": "lms_user_id",
+    }
+
+# See edx_django_service_automated_users for an example of what this should be
+ENTERPRISE_SUBSIDY_AUTOMATED_USERS: {}
+
+ENTERPRISE_SUBSIDY_CSRF_COOKIE_SECURE: false
+
+ENTERPRISE_SUBSIDY_ENABLE_NEWRELIC_DISTRIBUTED_TRACING: false
+
+enterprise_subsidy_post_migrate_commands: []
+
+ENTERPRISE_SUBSIDY_SOCIAL_AUTH_EDX_OAUTH2_KEY: 'enterprise-subsidy-sso-key'
+ENTERPRISE_SUBSIDY_SOCIAL_AUTH_EDX_OAUTH2_SECRET: 'enterprise-subsidy-sso-secret'
+ENTERPRISE_SUBSIDY_BACKEND_SERVICE_EDX_OAUTH2_KEY: 'enterprise-subsidy-backend-service-key'
+ENTERPRISE_SUBSIDY_BACKEND_SERVICE_EDX_OAUTH2_SECRET: 'enterprise-subsidy-backend-service-secret'
+
+ENTERPRISE_SUBSIDY_GIT_IDENTITY: !!null
+
+ENTERPRISE_SUBSIDY_REPOS:
+  - PROTOCOL: '{{ COMMON_GIT_PROTOCOL }}'
+    DOMAIN: '{{ COMMON_GIT_MIRROR }}'
+    PATH: '{{ COMMON_GIT_PATH }}'
+    REPO: 'enterprise-subsidy.git'
+    VERSION: '{{ ENTERPRISE_SUBSIDY_VERSION }}'
+    DESTINATION: "{{ enterprise_subsidy_code_dir }}"
+    SSH_KEY: '{{ ENTERPRISE_SUBSIDY_GIT_IDENTITY }}'
+
+ENTERPRISE_SUBSIDY_SECRET_KEY: 'SET-ME-PLEASE'
+
+# Remote config
+ENTERPRISE_SUBSIDY_HERMES_ENABLED: "{{ COMMON_HERMES_ENABLED }}"
+
+ENTERPRISE_SUBSIDY_DECRYPT_CONFIG_ENABLED: "{{ COMMON_DECRYPT_CONFIG_ENABLED }}"
+ENTERPRISE_SUBSIDY_COPY_CONFIG_ENABLED: "{{ COMMON_COPY_CONFIG_ENABLED }}"
+
+ENTERPRISE_SUBSIDY_ENABLE_ADMIN_URLS_RESTRICTION: false
+ENTERPRISE_SUBSIDY_ADMIN_URLS:
+  - admin

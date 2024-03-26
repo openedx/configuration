@@ -1,0 +1,28 @@
+- name: Deploy enterprise-access
+  hosts: all
+  become: True
+  gather_facts: True
+  vars:
+    ENABLE_NEWRELIC: True
+    CLUSTER_NAME: 'enterprise_access'
+    # Note: enterprise-access uses memcache by default. If a different cache is used,
+    # set this to false and set ENTERPRISE_ACCESS_MEMCACHE and ENTERPRISE_ACCESS_MEMCACHE_BACKEND
+    # to appropriate values.
+    ENTERPRISE_ACCESS_MEMCACHE_ENABLED: true
+    ENTERPRISE_ACCESS_HERMES_ENABLED: false
+  roles:
+    - role: aws
+      when: COMMON_ENABLE_AWS_ROLE
+    - role: nginx
+      nginx_default_sites:
+        - enterprise_access
+    - role: memcache
+      when: ENTERPRISE_ACCESS_MEMCACHE_ENABLED
+    - enterprise_access
+    - role: splunkforwarder
+      when: COMMON_ENABLE_SPLUNKFORWARDER
+    - role: newrelic_infrastructure
+      when: COMMON_ENABLE_NEWRELIC_INFRASTRUCTURE
+    - role: hermes
+      HERMES_TARGET_SERVICE: 'enterprise_access'
+      when: ENTERPRISE_ACCESS_HERMES_ENABLED
