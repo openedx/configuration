@@ -27,6 +27,19 @@ export DD_TAGS="service:edxapp-lms"
 export DD_TRACE_PYMONGO_ENABLED=false
 {% endif -%}
 
+{% if COMMON_ENABLE_OPENTELEMETRY_APP %}
+# NOTE: This relies on manual instrumentation, so we're not calling
+# opentelemetry-instrument (which is incompatible with gunicorn.)
+
+# Trying to deal with the following error when the gunicorn post_fork hook imports opentelemetry:
+#
+#   TypeError: Couldn't build proto file into descriptor pool: duplicate file name opentelemetry/proto/common/v1/common.proto
+#
+# Not sure why this might fix it, just something I saw in https://github.com/ray-project/ray/issues/31358
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION="python"
+{% endif -%}
+
+
 export PORT="{{ edxapp_lms_gunicorn_port }}"
 export ADDRESS="{{ edxapp_lms_gunicorn_host }}"
 export LANG="{{ EDXAPP_LANG }}"
